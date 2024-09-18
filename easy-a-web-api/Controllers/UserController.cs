@@ -139,5 +139,72 @@ namespace easy_a_web_api.Controllers
                 return StatusCode(500, new { error = "Internal server error: " + ex.Message });
             }
         }
+
+        /// <summary>
+        /// Updates the details of a user in Firestore.
+        /// </summary>
+        /// <param name="request">An UpdateUserRequest object containing the UID and updated details of the user.</param>
+        /// <returns>A response indicating whether the update was successful or if there was an error.</returns>
+        /// <remarks>
+        /// Requires the UID of the user to ensure the correct user is being updated. Only fields provided in the request will be updated.
+        /// </remarks>
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                // Retrieve user document from Firestore
+                DocumentReference docRef = FireStoreService.DB!.Collection("users").Document(request.Uid);
+                var userDoc = await docRef.GetSnapshotAsync();
+
+                if (!userDoc.Exists)
+                {
+                    return NotFound(new { error = "User not found" });
+                }
+
+                // Prepare updated user data
+                var userData = new Dictionary<string, object>();
+
+                if (!string.IsNullOrEmpty(request.FirstName))
+                    userData["firstname"] = request.FirstName;
+
+                if (!string.IsNullOrEmpty(request.LastName))
+                    userData["lastname"] = request.LastName;
+
+                if (!string.IsNullOrEmpty(request.Gender))
+                    userData["gender"] = request.Gender;
+
+                if (request.DateOfBirth.HasValue)
+                    userData["dob"] = request.DateOfBirth.Value;
+
+                // Update the user document in Firestore
+                await docRef.UpdateAsync(userData);
+
+                // Retrieve updated user details from Firestore
+                var updatedUserDoc = await docRef.GetSnapshotAsync();
+                var updatedUserData = updatedUserDoc.ToDictionary();
+
+                // Prepare response with updated user details
+                var userResult = new UserResult
+                {
+                    Uid = request.Uid,
+                    FirstName = updatedUserData.ContainsKey("firstname") ? updatedUserData["firstname"].ToString() : null,
+                    LastName = updatedUserData.ContainsKey("lastname") ? updatedUserData["lastname"].ToString() : null,
+                    Gender = updatedUserData.ContainsKey("gender") ? updatedUserData["gender"].ToString() : null,
+                    DateOfBirth = updatedUserData.ContainsKey("dob") ? updatedUserData["dob"].ToString() : null,
+                    ProfilePicture = updatedUserData.ContainsKey("pfp") ? updatedUserData["pfp"].ToString() : null
+                };
+
+                return Ok(userResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Internal server error: " + ex.Message });
+            }
+        }
+
     }
 }
