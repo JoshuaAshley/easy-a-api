@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\easy-a-web-api.props" />
+</Project>

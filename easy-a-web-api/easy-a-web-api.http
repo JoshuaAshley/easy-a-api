@@ -1,0 +1,6 @@
+@easy_a_web_api_HostAddress = http://localhost:5173
+
+GET {{easy_a_web_api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
