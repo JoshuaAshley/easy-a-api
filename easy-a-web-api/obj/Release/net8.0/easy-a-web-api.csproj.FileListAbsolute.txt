@@ -54,3 +54,5 @@ C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\bin\Release\net8.0\Sy
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\bin\Release\net8.0\System.Management.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\bin\Release\net8.0\runtimes\win\lib\net7.0\System.Management.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\easy-a-web-api.sourcelink.json
+C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\bin\Release\net8.0\FirebaseAdmin.dll
+C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\bin\Release\net8.0\Google.Api.Gax.Rest.dll

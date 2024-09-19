@@ -1,6 +1,7 @@
 ﻿using easy_a_web_api.Models.User;
 using easy_a_web_api.Services;
 using Firebase.Auth;
+using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
 using Microsoft.AspNetCore.Mvc;
 
@@ -63,7 +64,7 @@ namespace easy_a_web_api.Controllers
 
                 return Ok(registerResult);
             }
-            catch (FirebaseAuthException ex)
+            catch (Firebase.Auth.FirebaseAuthException ex)
             {
                 if (ex.Reason == AuthErrorReason.EmailExists)
                 {
@@ -116,16 +117,16 @@ namespace easy_a_web_api.Controllers
                     Uid = userId,
                     Token = token,
                     Email = request.Email,
-                    FirstName = userData.ContainsKey("firstname") ? userData["firstname"].ToString() : null,
-                    LastName = userData.ContainsKey("lastname") ? userData["lastname"].ToString() : null,
-                    Gender = userData.ContainsKey("gender") ? userData["gender"].ToString() : null,
-                    DateOfBirth = userData.ContainsKey("dob") ? userData["dob"].ToString() : null,
-                    ProfilePicture = userData.ContainsKey("pfp") ? userData["pfp"].ToString() : null
+                    FirstName = userData.ContainsKey("firstname") ? userData["firstname"]?.ToString() ?? string.Empty : string.Empty,
+                    LastName = userData.ContainsKey("lastname") ? userData["lastname"]?.ToString() ?? string.Empty : string.Empty,
+                    Gender = userData.ContainsKey("gender") ? userData["gender"]?.ToString() ?? string.Empty : string.Empty,
+                    DateOfBirth = userData.ContainsKey("dob") ? userData["dob"]?.ToString() ?? string.Empty : string.Empty,
+                    ProfilePicture = userData.ContainsKey("pfp") ? userData["pfp"]?.ToString() ?? string.Empty : string.Empty
                 };
 
                 return Ok(loginResult);
             }
-            catch (FirebaseAuthException ex)
+            catch (Firebase.Auth.FirebaseAuthException ex)
             {
                 if (ex.Reason == AuthErrorReason.InvalidEmailAddress || ex.Reason == AuthErrorReason.WrongPassword)
                 {
@@ -206,5 +207,64 @@ namespace easy_a_web_api.Controllers
             }
         }
 
+        /// <summary>
+        /// Signs in a user using Google Sign-In by verifying the Google ID token.
+        /// </summary>
+        /// <param name="token">Google ID token sent from the frontend.</param>
+        /// <returns>A response with user details and a custom token or an error message.</returns>
+        [HttpPost("google-signin")]
+        public async Task<IActionResult> GoogleSignIn([FromBody] GoogleSignInRequest request)
+        {
+            if (string.IsNullOrEmpty(request.Token))
+            {
+                return BadRequest(new { error = "Invalid token" });
+            }
+
+            try
+            {
+                // Verify the Google ID token using Firebase Admin SDK
+                FirebaseToken decodedToken = await FirebaseAdmin.Auth.FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(request.Token);
+                string userId = decodedToken.Uid;
+
+                // Check if the user exists in Firestore
+                DocumentReference docRef = FireStoreService.DB!.Collection("users").Document(userId);
+                var userDoc = await docRef.GetSnapshotAsync();
+
+                if (!userDoc.Exists)
+                {
+                    // If the user does not exist, create a new user in Firestore
+                    var userData = new
+                    {
+                        uid = userId,
+                        firstname = decodedToken.Claims.ContainsKey("given_name") ? decodedToken.Claims["given_name"].ToString() : string.Empty,
+                        lastname = decodedToken.Claims.ContainsKey("family_name") ? decodedToken.Claims["family_name"].ToString() : string.Empty,
+                        email = decodedToken.Claims["email"].ToString(),
+                        pfp = decodedToken.Claims.ContainsKey("picture") ? decodedToken.Claims["picture"].ToString() : string.Empty
+                    };
+
+                    await docRef.SetAsync(userData);
+                }
+
+                // Return user data
+                var userResult = new UserResult
+                {
+                    Uid = userId,
+                    Email = decodedToken.Claims["email"].ToString(),
+                    FirstName = decodedToken.Claims.ContainsKey("given_name") ? decodedToken.Claims["given_name"].ToString() : null,
+                    LastName = decodedToken.Claims.ContainsKey("family_name") ? decodedToken.Claims["family_name"].ToString() : null,
+                    ProfilePicture = decodedToken.Claims.ContainsKey("picture") ? decodedToken.Claims["picture"].ToString() : null
+                };
+
+                return Ok(userResult);
+            }
+            catch (FirebaseAdmin.Auth.FirebaseAuthException ex)
+            {
+                return Unauthorized(new { error = "Invalid Google token: " + ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Internal server error: " + ex.Message });
+            }
+        }
     }
 }

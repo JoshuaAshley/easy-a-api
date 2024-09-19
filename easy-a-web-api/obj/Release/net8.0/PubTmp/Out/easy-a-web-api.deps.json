@@ -9,6 +9,7 @@
       "easy-a-web-api/1.0.0": {
         "dependencies": {
           "Firebase.Auth": "1.0.0",
+          "FirebaseAdmin": "3.0.1",
           "Google.Cloud.Firestore": "3.8.0",
           "Swashbuckle.AspNetCore": "6.4.0"
         },
@@ -26,6 +27,19 @@
           "lib/netstandard1.1/Firebase.Auth.dll": {
             "assemblyVersion": "1.0.0.0",
             "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "FirebaseAdmin/3.0.1": {
+        "dependencies": {
+          "Google.Api.Gax.Rest": "4.8.0",
+          "Google.Apis.Auth": "1.68.0",
+          "System.Collections.Immutable": "8.0.0"
+        },
+        "runtime": {
+          "lib/net6.0/FirebaseAdmin.dll": {
+            "assemblyVersion": "3.0.1.0",
+            "fileVersion": "3.0.1.0"
           }
         }
       },
@@ -56,7 +70,7 @@
         "dependencies": {
           "Google.Api.CommonProtos": "2.15.0",
           "Google.Api.Gax": "4.8.0",
-          "Google.Apis.Auth": "1.67.0",
+          "Google.Apis.Auth": "1.68.0",
           "Grpc.Auth": "2.60.0",
           "Grpc.Core.Api": "2.60.0",
           "Grpc.Net.Client": "2.60.0",
@@ -69,45 +83,58 @@
           }
         }
       },
-      "Google.Apis/1.67.0": {
+      "Google.Api.Gax.Rest/4.8.0": {
         "dependencies": {
-          "Google.Apis.Core": "1.67.0"
+          "Google.Api.Gax": "4.8.0",
+          "Google.Apis.Auth": "1.68.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "6.0.0"
         },
         "runtime": {
-          "lib/net6.0/Google.Apis.dll": {
-            "assemblyVersion": "1.67.0.0",
-            "fileVersion": "1.67.0.0"
+          "lib/netstandard2.0/Google.Api.Gax.Rest.dll": {
+            "assemblyVersion": "4.8.0.0",
+            "fileVersion": "4.8.0.0"
           }
         }
       },
-      "Google.Apis.Auth/1.67.0": {
+      "Google.Apis/1.68.0": {
         "dependencies": {
-          "Google.Apis": "1.67.0",
-          "Google.Apis.Core": "1.67.0",
+          "Google.Apis.Core": "1.68.0"
+        },
+        "runtime": {
+          "lib/net6.0/Google.Apis.dll": {
+            "assemblyVersion": "1.68.0.0",
+            "fileVersion": "1.68.0.0"
+          }
+        }
+      },
+      "Google.Apis.Auth/1.68.0": {
+        "dependencies": {
+          "Google.Apis": "1.68.0",
+          "Google.Apis.Core": "1.68.0",
           "System.Management": "7.0.2"
         },
         "runtime": {
           "lib/net6.0/Google.Apis.Auth.dll": {
-            "assemblyVersion": "1.67.0.0",
-            "fileVersion": "1.67.0.0"
+            "assemblyVersion": "1.68.0.0",
+            "fileVersion": "1.68.0.0"
           }
         }
       },
-      "Google.Apis.Core/1.67.0": {
+      "Google.Apis.Core/1.68.0": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "lib/net6.0/Google.Apis.Core.dll": {
-            "assemblyVersion": "1.67.0.0",
-            "fileVersion": "1.67.0.0"
+            "assemblyVersion": "1.68.0.0",
+            "fileVersion": "1.68.0.0"
           }
         }
       },
       "Google.Cloud.Firestore/3.8.0": {
         "dependencies": {
           "Google.Cloud.Firestore.V1": "3.8.0",
-          "System.Collections.Immutable": "6.0.0",
+          "System.Collections.Immutable": "8.0.0",
           "System.Linq.Async": "6.0.1"
         },
         "runtime": {
@@ -162,7 +189,7 @@
       },
       "Grpc.Auth/2.60.0": {
         "dependencies": {
-          "Google.Apis.Auth": "1.67.0",
+          "Google.Apis.Auth": "1.68.0",
           "Grpc.Core.Api": "2.60.0"
         },
         "runtime": {
@@ -411,11 +438,7 @@
           "System.Threading.Tasks": "4.0.11"
         }
       },
-      "System.Collections.Immutable/6.0.0": {
-        "dependencies": {
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        }
-      },
+      "System.Collections.Immutable/8.0.0": {},
       "System.Console/4.0.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -723,7 +746,6 @@
           "Microsoft.NETCore.Targets": "1.0.1"
         }
       },
-      "System.Runtime.CompilerServices.Unsafe/6.0.0": {},
       "System.Runtime.Extensions/4.1.0": {
         "dependencies": {
           "Microsoft.NETCore.Platforms": "1.0.1",
@@ -991,6 +1013,13 @@
       "path": "firebase.auth/1.0.0",
       "hashPath": "firebase.auth.1.0.0.nupkg.sha512"
     },
+    "FirebaseAdmin/3.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CvWwqFE0mIQBHFDrV9A0YXcwGNKbCH4q2JWkm/4HQ+huU/Kkj9VIrmjcXiqg7l2KydZQu3Pfeobo7L81BtQMdA==",
+      "path": "firebaseadmin/3.0.1",
+      "hashPath": "firebaseadmin.3.0.1.nupkg.sha512"
+    },
     "Google.Api.CommonProtos/2.15.0": {
       "type": "package",
       "serviceable": true,
@@ -1012,26 +1041,33 @@
       "path": "google.api.gax.grpc/4.8.0",
       "hashPath": "google.api.gax.grpc.4.8.0.nupkg.sha512"
     },
-    "Google.Apis/1.67.0": {
+    "Google.Api.Gax.Rest/4.8.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-XM8/fViJaB1pN61OdXy5RMZoQEqd3hKlWvA/K431gFSb5XtQ48BynfgrbBkUtFcPbSRa4BdjBHzSbkBh/skyMg==",
-      "path": "google.apis/1.67.0",
-      "hashPath": "google.apis.1.67.0.nupkg.sha512"
+      "sha512": "sha512-zaA5LZ2VvGj/wwIzRB68swr7khi2kWNgqWvsB0fYtScIAl3kGkGtqiBcx63H1YLeKr5xau1866bFjTeReH6FSQ==",
+      "path": "google.api.gax.rest/4.8.0",
+      "hashPath": "google.api.gax.rest.4.8.0.nupkg.sha512"
     },
-    "Google.Apis.Auth/1.67.0": {
+    "Google.Apis/1.68.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Bs9BlbZ12Y4NXzMONjpzQhZr9VbwLUTGMHkcQRF36aYnk2fYrmj5HNVNh7PPHDDq1fcEQpCtPic2nSlpYQLKXw==",
-      "path": "google.apis.auth/1.67.0",
-      "hashPath": "google.apis.auth.1.67.0.nupkg.sha512"
+      "sha512": "sha512-s2MymhdpH+ybZNBeZ2J5uFgFHApBp+QXf9FjZSdM1lk/vx5VqIknJwnaWiuAzXxPrLEkesX0Q+UsiWn39yZ9zw==",
+      "path": "google.apis/1.68.0",
+      "hashPath": "google.apis.1.68.0.nupkg.sha512"
     },
-    "Google.Apis.Core/1.67.0": {
+    "Google.Apis.Auth/1.68.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IPq0I3B01NYZraPoMl8muELFLg4Vr2sbfyZp4PR2Xe3MAhHkZCiKyV28Yh1L14zIKUb0X0snol1sR5/mx4S6Iw==",
-      "path": "google.apis.core/1.67.0",
-      "hashPath": "google.apis.core.1.67.0.nupkg.sha512"
+      "sha512": "sha512-hFx8Qz5bZ4w0hpnn4tSmZaaFpjAMsgVElZ+ZgVLUZ2r9i+AKcoVgwiNfv1pruNS5cCvpXqhKECbruBCfRezPHA==",
+      "path": "google.apis.auth/1.68.0",
+      "hashPath": "google.apis.auth.1.68.0.nupkg.sha512"
+    },
+    "Google.Apis.Core/1.68.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pAqwa6pfu53UXCR2b7A/PAPXeuVg6L1OFw38WckN27NU2+mf+KTjoEg2YGv/f0UyKxzz7DxF1urOTKg/6dTP9g==",
+      "path": "google.apis.core/1.68.0",
+      "hashPath": "google.apis.core.1.68.0.nupkg.sha512"
     },
     "Google.Cloud.Firestore/3.8.0": {
       "type": "package",
@@ -1285,12 +1321,12 @@
       "path": "system.collections.concurrent/4.0.12",
       "hashPath": "system.collections.concurrent.4.0.12.nupkg.sha512"
     },
-    "System.Collections.Immutable/6.0.0": {
+    "System.Collections.Immutable/8.0.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-l4zZJ1WU2hqpQQHXz1rvC3etVZN+2DLmQMO79FhOTZHMn8tDRr+WU287sbomD0BETlmKDn0ygUgVy9k5xkkJdA==",
-      "path": "system.collections.immutable/6.0.0",
-      "hashPath": "system.collections.immutable.6.0.0.nupkg.sha512"
+      "sha512": "sha512-AurL6Y5BA1WotzlEvVaIDpqzpIPvYnnldxru8oXJU2yFxFUy3+pNXjXd1ymO+RA0rq0+590Q8gaz2l3Sr7fmqg==",
+      "path": "system.collections.immutable/8.0.0",
+      "hashPath": "system.collections.immutable.8.0.0.nupkg.sha512"
     },
     "System.Console/4.0.0": {
       "type": "package",
@@ -1501,13 +1537,6 @@
       "sha512": "sha512-v6c/4Yaa9uWsq+JMhnOFewrYkgdNHNG2eMKuNqRn8P733rNXeRCGvV5FkkjBXn2dbVkPXOsO0xjsEeM1q2zC0g==",
       "path": "system.runtime/4.1.0",
       "hashPath": "system.runtime.4.1.0.nupkg.sha512"
-    },
-    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
-      "path": "system.runtime.compilerservices.unsafe/6.0.0",
-      "hashPath": "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512"
     },
     "System.Runtime.Extensions/4.1.0": {
       "type": "package",

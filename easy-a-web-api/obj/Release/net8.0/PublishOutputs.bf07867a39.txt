@@ -6,9 +6,11 @@ C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\Pu
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\easy-a-web-api.runtimeconfig.json
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\easy-a-web-api.pdb
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Firebase.Auth.dll
+C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\FirebaseAdmin.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Api.CommonProtos.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Api.Gax.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Api.Gax.Grpc.dll
+C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Api.Gax.Rest.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.Auth.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.Core.dll

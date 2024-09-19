@@ -1,6 +1,22 @@
 [
   {
     "ContainingType": "easy_a_web_api.Controllers.UserController",
+    "Method": "GoogleSignIn",
+    "RelativePath": "api/User/google-signin",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "easy_a_web_api.Models.User.GoogleSignInRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.UserController",
     "Method": "Login",
     "RelativePath": "api/User/login",
     "HttpMethod": "POST",
