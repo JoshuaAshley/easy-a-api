@@ -1,6 +1,27 @@
 [
   {
     "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
+    "Method": "GetQuestionPaperById",
+    "RelativePath": "api/QuestionPaper/{uid}/question-paper/{questionPaperId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionPaperId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
     "Method": "CreateQuestionPaper",
     "RelativePath": "api/QuestionPaper/create",
     "HttpMethod": "POST",
@@ -36,6 +57,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
+    "Method": "GetQuestionPapersByUser",
+    "RelativePath": "api/QuestionPaper/list/{uid}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "easy_a_web_api.Controllers.UserController",
     "Method": "GoogleSignIn",
     "RelativePath": "api/User/google-signin",
@@ -44,9 +81,9 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "easy_a_web_api.Models.User.GoogleSignInRequest",
-        "IsRequired": true
+        "Name": "Token",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -60,9 +97,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "easy_a_web_api.Models.User.LoginRequest",
-        "IsRequired": true
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -76,9 +118,44 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "easy_a_web_api.Models.User.RegisterRequest",
-        "IsRequired": true
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ConfirmPassword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Gender",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DateOfBirth",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

@@ -83,5 +83,73 @@ namespace easy_a_web_api.Controllers
                 return StatusCode(500, new { error = "An error occurred: " + ex.Message });
             }
         }
+
+        [HttpGet("list/{uid}")]
+        public async Task<IActionResult> GetQuestionPapersByUser(string uid)
+        {
+            try
+            {
+                // Reference to the user's question papers collection
+                DocumentReference userDocRef = _firestoreDb.Collection("users").Document(uid);
+                CollectionReference questionPapersCollection = userDocRef.Collection("questionPapers");
+
+                // Get all documents in the question papers collection
+                QuerySnapshot questionPapersSnapshot = await questionPapersCollection.GetSnapshotAsync();
+
+                var questionPapersList = questionPapersSnapshot.Documents.Select(doc => new QuestionPaperResult
+                {
+                    Uid = uid,
+                    QuestionPaperId = doc.Id,
+                    QuestionPaperName = doc.ContainsField("questionPaperName") ? doc.GetValue<string>("questionPaperName") : null,
+                    QuestionPaperDueDate = doc.ContainsField("questionPaperDueDate") ? doc.GetValue<DateTime?>("questionPaperDueDate")?.ToString("yyyy-MM-dd") : null,
+                    QuestionPaperDescription = doc.ContainsField("questionPaperDescription") ? doc.GetValue<string>("questionPaperDescription") : null,
+                    PDFLocation = doc.ContainsField("pdfLocation") ? doc.GetValue<string>("pdfLocation") : null
+                }).ToList();
+
+                return Ok(new { questionPapers = questionPapersList });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
+
+        [HttpGet("{uid}/question-paper/{questionPaperId}")]
+        public async Task<IActionResult> GetQuestionPaperById(string uid, string questionPaperId)
+        {
+            try
+            {
+                // Reference to the specific question paper document
+                DocumentReference questionPaperDocRef = _firestoreDb.Collection("users").Document(uid)
+                    .Collection("questionPapers").Document(questionPaperId);
+
+                // Get the document
+                DocumentSnapshot questionPaperSnapshot = await questionPaperDocRef.GetSnapshotAsync();
+
+                if (!questionPaperSnapshot.Exists)
+                {
+                    return NotFound(new { error = "Question paper not found" });
+                }
+
+                // Prepare the result
+                var questionPaperResult = new QuestionPaperResult
+                {
+                    Uid = uid,
+                    QuestionPaperId = questionPaperSnapshot.Id,
+                    QuestionPaperName = questionPaperSnapshot.ContainsField("questionPaperName") ? questionPaperSnapshot.GetValue<string>("questionPaperName") : "",
+                    QuestionPaperDueDate = questionPaperSnapshot.ContainsField("questionPaperDueDate") ? questionPaperSnapshot.GetValue<DateTime>("questionPaperDueDate").ToString() : "",
+                    QuestionPaperDescription = questionPaperSnapshot.ContainsField("questionPaperDescription") ? questionPaperSnapshot.GetValue<string>("questionPaperDescription") : "",
+                    PDFLocation = questionPaperSnapshot.ContainsField("pdfLocation") ? questionPaperSnapshot.GetValue<string>("pdfLocation") : ""
+                };
+
+                return Ok(questionPaperResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
+
+
     }
 }

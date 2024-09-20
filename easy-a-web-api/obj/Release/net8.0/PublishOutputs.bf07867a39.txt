@@ -14,9 +14,11 @@ C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\Pu
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.Auth.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.Core.dll
+C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Apis.Storage.v1.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Cloud.Firestore.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Cloud.Firestore.V1.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Cloud.Location.dll
+C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Cloud.Storage.V1.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.LongRunning.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Google.Protobuf.dll
 C:\Users\Joshua\source\repos\easy-a-web-api\easy-a-web-api\obj\Release\net8.0\PubTmp\Out\Grpc.Auth.dll

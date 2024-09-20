@@ -27,7 +27,7 @@ namespace easy_a_web_api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromForm] RegisterRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -90,7 +90,7 @@ namespace easy_a_web_api.Controllers
         /// <param name="request">LoginRequest object containing email and password.</param>
         /// <returns>A response with an authentication token and user details if successful, or an error message if authentication fails.</returns>
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromForm] LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -236,7 +236,7 @@ namespace easy_a_web_api.Controllers
         /// <param name="token">Google ID token sent from the frontend.</param>
         /// <returns>A response with user details and a custom token or an error message.</returns>
         [HttpPost("google-signin")]
-        public async Task<IActionResult> GoogleSignIn([FromBody] GoogleSignInRequest request)
+        public async Task<IActionResult> GoogleSignIn([FromForm] GoogleSignInRequest request)
         {
             if (string.IsNullOrEmpty(request.Token))
             {
