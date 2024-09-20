@@ -26,7 +26,10 @@ namespace easy_a_web_api.Controllers
             try
             {
                 // Convert the question paper due date to UTC (if not already in UTC)
-                DateTime? questionPaperDueDateUtc = request.QuestionPaperDueDate?.ToUniversalTime();
+                DateTime? questionPaperDueDateUtc = request.QuestionPaperDueDate.HasValue
+                    ? DateTime.SpecifyKind(request.QuestionPaperDueDate.Value, DateTimeKind.Unspecified)
+                          .ToUniversalTime()
+                    : null;
 
                 // Prepare Firestore data without the PDF location initially
                 var questionPaperData = new
@@ -34,7 +37,7 @@ namespace easy_a_web_api.Controllers
                     questionPaperName = request.QuestionPaperName ?? string.Empty,
                     questionPaperDueDate = questionPaperDueDateUtc,
                     questionPaperDescription = request.QuestionPaperDescription ?? string.Empty,
-                    pdfLocation = string.Empty // Placeholder for the PDF location
+                    pdfLocation = string.Empty
                 };
 
                 // Store question paper record inside the user's collection
@@ -58,22 +61,37 @@ namespace easy_a_web_api.Controllers
                     pdfUrl = await FileManagementService.UploadPdfToStorage(_storageClient, _bucketName, storageFolder, request.PdfFile);
 
                     // Update the question paper document with the PDF location
-                    var updateData = new Dictionary<string, object>
+                    var updatePDFData = new Dictionary<string, object>
                     {
                         { "pdfLocation", pdfUrl }
                     };
-                    await newQuestionPaperDocRef.UpdateAsync(updateData);
+                    await newQuestionPaperDocRef.UpdateAsync(updatePDFData);
                 }
 
-                // Prepare the result model
+                int numQuestions = 0;
+                var updateData = new Dictionary<string, object>
+                {
+                    { "numQuestions", numQuestions }
+                };
+
+                await newQuestionPaperDocRef.UpdateAsync(updateData);
+
+                // Convert the due date to UTC+2
+                string? questionPaperDueDateUtcPlus2 = questionPaperDueDateUtc.HasValue
+                    ? TimeZoneInfo.ConvertTimeFromUtc(questionPaperDueDateUtc.Value, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"))
+                                     .ToString("yyyy-MM-dd")
+                    : null;
+
+                // Prepare the result model with the converted due date (UTC+2)
                 var result = new QuestionPaperResult
                 {
                     Uid = request.Uid,
                     QuestionPaperId = questionPaperId,
                     QuestionPaperName = request.QuestionPaperName,
-                    QuestionPaperDueDate = questionPaperDueDateUtc?.ToString("yyyy-MM-dd"),
+                    QuestionPaperDueDate = questionPaperDueDateUtcPlus2,
                     QuestionPaperDescription = request.QuestionPaperDescription,
-                    PDFLocation = pdfUrl
+                    PDFLocation = pdfUrl,
+                    NumQuestions = numQuestions
                 };
 
                 return Ok(new { message = "Question paper created successfully", result });
@@ -96,14 +114,19 @@ namespace easy_a_web_api.Controllers
                 // Get all documents in the question papers collection
                 QuerySnapshot questionPapersSnapshot = await questionPapersCollection.GetSnapshotAsync();
 
+                // Define the desired timezone (UTC+2 in this case)
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"); // Use your specific timezone
+
                 var questionPapersList = questionPapersSnapshot.Documents.Select(doc => new QuestionPaperResult
                 {
                     Uid = uid,
                     QuestionPaperId = doc.Id,
-                    QuestionPaperName = doc.ContainsField("questionPaperName") ? doc.GetValue<string>("questionPaperName") : null,
-                    QuestionPaperDueDate = doc.ContainsField("questionPaperDueDate") ? doc.GetValue<DateTime?>("questionPaperDueDate")?.ToString("yyyy-MM-dd") : null,
-                    QuestionPaperDescription = doc.ContainsField("questionPaperDescription") ? doc.GetValue<string>("questionPaperDescription") : null,
-                    PDFLocation = doc.ContainsField("pdfLocation") ? doc.GetValue<string>("pdfLocation") : null
+                    QuestionPaperName = doc.ContainsField("questionPaperName") ? doc.GetValue<string>("questionPaperName") : "",
+                    QuestionPaperDueDate = doc.ContainsField("questionPaperDueDate") ?
+                        TimeZoneInfo.ConvertTimeFromUtc(doc.GetValue<DateTime>("questionPaperDueDate"), timeZone).ToString("yyyy-MM-dd") : "",
+                    QuestionPaperDescription = doc.ContainsField("questionPaperDescription") ? doc.GetValue<string>("questionPaperDescription") : "",
+                    PDFLocation = doc.ContainsField("pdfLocation") ? doc.GetValue<string>("pdfLocation") : "",
+                    NumQuestions = doc.ContainsField("numQuestions") ? doc.GetValue<int>("numQuestions") : 0
                 }).ToList();
 
                 return Ok(new { questionPapers = questionPapersList });
@@ -131,15 +154,20 @@ namespace easy_a_web_api.Controllers
                     return NotFound(new { error = "Question paper not found" });
                 }
 
+                // Define the desired timezone (UTC+2 in this case)
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time");
+
                 // Prepare the result
                 var questionPaperResult = new QuestionPaperResult
                 {
                     Uid = uid,
                     QuestionPaperId = questionPaperSnapshot.Id,
                     QuestionPaperName = questionPaperSnapshot.ContainsField("questionPaperName") ? questionPaperSnapshot.GetValue<string>("questionPaperName") : "",
-                    QuestionPaperDueDate = questionPaperSnapshot.ContainsField("questionPaperDueDate") ? questionPaperSnapshot.GetValue<DateTime>("questionPaperDueDate").ToString() : "",
+                    QuestionPaperDueDate = questionPaperSnapshot.ContainsField("questionPaperDueDate") ?
+                        TimeZoneInfo.ConvertTimeFromUtc(questionPaperSnapshot.GetValue<DateTime>("questionPaperDueDate"), timeZone).ToString("yyyy-MM-dd") : "",
                     QuestionPaperDescription = questionPaperSnapshot.ContainsField("questionPaperDescription") ? questionPaperSnapshot.GetValue<string>("questionPaperDescription") : "",
-                    PDFLocation = questionPaperSnapshot.ContainsField("pdfLocation") ? questionPaperSnapshot.GetValue<string>("pdfLocation") : ""
+                    PDFLocation = questionPaperSnapshot.ContainsField("pdfLocation") ? questionPaperSnapshot.GetValue<string>("pdfLocation") : "",
+                    NumQuestions = questionPaperSnapshot.ContainsField("numQuestions") ? questionPaperSnapshot.GetValue<int>("numQuestions") : 0
                 };
 
                 return Ok(questionPaperResult);

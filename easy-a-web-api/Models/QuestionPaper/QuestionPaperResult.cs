@@ -13,5 +13,7 @@
         public string? QuestionPaperDescription { get; set; }
 
         public string? PDFLocation { get; set; }
+
+        public int? NumQuestions { get; set; }
     }
 }
