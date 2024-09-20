@@ -178,6 +178,31 @@ namespace easy_a_web_api.Controllers
             }
         }
 
+        [HttpGet("{uid}/question-paper/{questionPaperId}/pdf")]
+        public async Task<IActionResult> GetQuestionPaperPDFById(string uid, string questionPaperId)
+        {
+            try
+            {
+                // Reference to the specific question paper document
+                DocumentReference questionPaperDocRef = _firestoreDb.Collection("users").Document(uid)
+                    .Collection("questionPapers").Document(questionPaperId);
 
+                // Get the document
+                DocumentSnapshot questionPaperSnapshot = await questionPaperDocRef.GetSnapshotAsync();
+
+                if (!questionPaperSnapshot.Exists)
+                {
+                    return NotFound(new { error = "Question paper not found" });
+                }
+
+                string PDFLocation = questionPaperSnapshot.ContainsField("pdfLocation") ? questionPaperSnapshot.GetValue<string>("pdfLocation") : "";
+
+                return Ok(new { message = PDFLocation });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
     }
 }

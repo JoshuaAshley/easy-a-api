@@ -22,6 +22,27 @@
   },
   {
     "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
+    "Method": "GetQuestionPaperPDFById",
+    "RelativePath": "api/QuestionPaper/{uid}/question-paper/{questionPaperId}/pdf",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionPaperId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
     "Method": "CreateQuestionPaper",
     "RelativePath": "api/QuestionPaper/create",
     "HttpMethod": "POST",
