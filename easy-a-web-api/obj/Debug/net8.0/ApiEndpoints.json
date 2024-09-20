@@ -1,5 +1,41 @@
 [
   {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionController",
+    "Method": "CreateQuestion",
+    "RelativePath": "api/Question/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Uid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionPaperId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
     "Method": "GetQuestionPaperById",
     "RelativePath": "api/QuestionPaper/{uid}/question-paper/{questionPaperId}",
