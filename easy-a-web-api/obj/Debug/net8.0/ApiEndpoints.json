@@ -1,5 +1,41 @@
 [
   {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
+    "Method": "CreateQuestionPaper",
+    "RelativePath": "api/QuestionPaper/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Uid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionPaperName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionPaperDueDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "QuestionPaperDescription",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "PdfFile",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "easy_a_web_api.Controllers.UserController",
     "Method": "GoogleSignIn",
     "RelativePath": "api/User/google-signin",
@@ -56,9 +92,34 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "easy_a_web_api.Models.User.UpdateUserRequest",
-        "IsRequired": true
+        "Name": "Uid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "FirstName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Gender",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "DateOfBirth",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfileImage",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

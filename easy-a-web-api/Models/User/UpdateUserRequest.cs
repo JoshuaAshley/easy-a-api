@@ -11,5 +11,7 @@
         public string? Gender { get; set; }
 
         public DateTime? DateOfBirth { get; set; }
+
+        public IFormFile? ProfileImage { get; set; }
     }
 }

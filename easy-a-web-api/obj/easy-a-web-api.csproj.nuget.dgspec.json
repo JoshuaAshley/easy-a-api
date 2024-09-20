@@ -63,6 +63,10 @@
               "target": "Package",
               "version": "[3.8.0, )"
             },
+            "Google.Cloud.Storage.V1": {
+              "target": "Package",
+              "version": "[4.10.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"

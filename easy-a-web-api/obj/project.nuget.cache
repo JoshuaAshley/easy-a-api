@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "YPaKHQx4T18gMIH/P9i2WS44RskXahYj1ZUMngvkqc/A8jLKLQe218zpOnmqj4e941cQD8UDgzW1KnPQv5Z2qg==",
+  "dgSpecHash": "w35diWtB7y/+vM5u0lW2HLnK6z67/kdvjlyD5dwGlg87qxR7mrVI3f8fg6fX2FQFnQyqrN2oKc5jr3LqXEzbIQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Joshua\\source\\repos\\easy-a-web-api\\easy-a-web-api\\easy-a-web-api.csproj",
   "expectedPackageFiles": [
@@ -13,9 +13,11 @@
     "C:\\Users\\Joshua\\.nuget\\packages\\google.apis\\1.68.0\\google.apis.1.68.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.apis.auth\\1.68.0\\google.apis.auth.1.68.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.apis.core\\1.68.0\\google.apis.core.1.68.0.nupkg.sha512",
+    "C:\\Users\\Joshua\\.nuget\\packages\\google.apis.storage.v1\\1.67.0.3365\\google.apis.storage.v1.1.67.0.3365.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.cloud.firestore\\3.8.0\\google.cloud.firestore.3.8.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.cloud.firestore.v1\\3.8.0\\google.cloud.firestore.v1.3.8.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.cloud.location\\2.3.0\\google.cloud.location.2.3.0.nupkg.sha512",
+    "C:\\Users\\Joshua\\.nuget\\packages\\google.cloud.storage.v1\\4.10.0\\google.cloud.storage.v1.4.10.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.longrunning\\3.3.0\\google.longrunning.3.3.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\google.protobuf\\3.25.0\\google.protobuf.3.25.0.nupkg.sha512",
     "C:\\Users\\Joshua\\.nuget\\packages\\grpc.auth\\2.60.0\\grpc.auth.2.60.0.nupkg.sha512",

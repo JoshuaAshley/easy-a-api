@@ -3,6 +3,7 @@ using easy_a_web_api.Services;
 using Firebase.Auth;
 using FirebaseAdmin.Auth;
 using Google.Cloud.Firestore;
+using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
 
 namespace easy_a_web_api.Controllers
@@ -12,6 +13,8 @@ namespace easy_a_web_api.Controllers
     public class UserController : ControllerBase
     {
         private readonly FirebaseAuthProvider _authProvider;
+        private readonly StorageClient _storageClient;
+        private readonly string _bucketName = "easy-a-dbad0.appspot.com";
 
         public UserController()
         {
@@ -19,6 +22,8 @@ namespace easy_a_web_api.Controllers
 
             // Initialize Firebase Auth
             _authProvider = new FirebaseAuthProvider(new FirebaseConfig(firebaseAPIKey));
+
+            _storageClient = FireStoreService.StorageClient!;
         }
 
         [HttpPost("register")]
@@ -150,7 +155,7 @@ namespace easy_a_web_api.Controllers
         /// Requires the UID of the user to ensure the correct user is being updated. Only fields provided in the request will be updated.
         /// </remarks>
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserRequest request)
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -166,6 +171,9 @@ namespace easy_a_web_api.Controllers
                     return NotFound(new { error = "User not found" });
                 }
 
+                // Convert the question paper due date to UTC (if not already in UTC)
+                DateTime? dob = request.DateOfBirth?.ToUniversalTime();
+
                 // Prepare updated user data
                 var userData = new Dictionary<string, object>();
 
@@ -178,8 +186,23 @@ namespace easy_a_web_api.Controllers
                 if (!string.IsNullOrEmpty(request.Gender))
                     userData["gender"] = request.Gender;
 
-                if (request.DateOfBirth.HasValue)
-                    userData["dob"] = request.DateOfBirth.Value;
+                if (dob.HasValue)
+                    userData["dob"] = dob;
+
+                string imageUrl = string.Empty;
+
+                // Check if a PDF file is provided in the request
+                if (request.ProfileImage != null)
+                {
+                    // Folder structure: users/{Uid}/questionPapers/{QuestionPaperId}/PDF
+                    string storageFolder = $"profile-photos/{request.Uid}";
+
+                    // Upload the PDF to Firebase Storage
+                    imageUrl = await FileManagementService.UploadImageToStorage(_storageClient, _bucketName, storageFolder, request.ProfileImage);
+
+                    // Update the question paper document with the PDF location
+                    userData["pfp"] = imageUrl;
+                }
 
                 // Update the user document in Firestore
                 await docRef.UpdateAsync(userData);

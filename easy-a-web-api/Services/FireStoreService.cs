@@ -1,4 +1,6 @@
-﻿using Google.Cloud.Firestore;
+﻿using Google.Apis.Auth.OAuth2;
+using Google.Cloud.Firestore;
+using Google.Cloud.Storage.V1;
 
 namespace easy_a_web_api.Services
 {
@@ -21,14 +23,17 @@ namespace easy_a_web_api.Services
 
         static string filepath = "";
         public static FirestoreDb? DB { get; private set; }
+        public static StorageClient? StorageClient { get; private set; }
 
         public static void SetEnvironmentVariable()
         {
             filepath = Path.Combine(Path.GetTempPath(), Path.GetFileNameWithoutExtension(Path.GetRandomFileName())) + ".json";
             File.WriteAllText(filepath, fireconfig);
             File.SetAttributes(filepath, FileAttributes.Hidden);
+            GoogleCredential credential = GoogleCredential.FromFile(filepath);
             Environment.SetEnvironmentVariable("GOOGLE_APPLICATION_CREDENTIALS", filepath);
             DB = FirestoreDb.Create("easy-a-dbad0");
+            StorageClient = StorageClient.Create(credential);
             File.Delete(filepath);
         }
     }
