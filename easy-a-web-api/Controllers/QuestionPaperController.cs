@@ -62,18 +62,18 @@ namespace easy_a_web_api.Controllers
 
                     // Update the question paper document with the PDF location
                     var updatePDFData = new Dictionary<string, object>
-                    {
-                        { "pdfLocation", pdfUrl }
-                    };
+            {
+                { "pdfLocation", pdfUrl }
+            };
                     await newQuestionPaperDocRef.UpdateAsync(updatePDFData);
                 }
 
                 int numQuestions = 0;
                 var updateData = new Dictionary<string, object>
-                {
-                    { "numQuestions", numQuestions },
-                    { "numCompletedQuestions", numQuestions }
-                };
+        {
+            { "numQuestions", numQuestions },
+            { "numCompletedQuestions", numQuestions }
+        };
 
                 await newQuestionPaperDocRef.UpdateAsync(updateData);
 
@@ -96,7 +96,22 @@ namespace easy_a_web_api.Controllers
                     NumCompletedQuestions = numQuestions
                 };
 
-                return Ok(new { message = "Question paper created successfully", result });
+                // Create a corresponding event for the question paper with event name and due date
+                if (questionPaperDueDateUtc.HasValue)
+                {
+                    // Prepare event data
+                    var eventData = new
+                    {
+                        eventName = request.QuestionPaperName,
+                        eventDate = questionPaperDueDateUtc // Store the due date as event date in UTC
+                    };
+
+                    // Add the event to the user's "events" collection
+                    CollectionReference eventsCollection = userDocRef.Collection("events");
+                    await eventsCollection.AddAsync(eventData);
+                }
+
+                return Ok(new { message = "Question paper and event created successfully", result });
             }
             catch (Exception ex)
             {
