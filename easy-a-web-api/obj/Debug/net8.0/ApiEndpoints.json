@@ -1,5 +1,68 @@
 [
   {
+    "ContainingType": "easy_a_web_api.Controllers.EventController",
+    "Method": "GetEvent",
+    "RelativePath": "api/Event/{uid}/event/{eventId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "eventId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.EventController",
+    "Method": "CreateEvent",
+    "RelativePath": "api/Event/create",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Uid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "EventName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "EventDate",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.EventController",
+    "Method": "ListEvents",
+    "RelativePath": "api/Event/list/{uid}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "easy_a_web_api.Controllers.QuestionController",
     "Method": "GetQuestionsByQuestionPaperId",
     "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions",
