@@ -1,5 +1,42 @@
 [
   {
+    "ContainingType": "easy_a_web_api.Controllers.ChartController",
+    "Method": "GetCompletedStatusForMonth",
+    "RelativePath": "api/Chart/completed/{uid}/{month}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "month",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.ChartController",
+    "Method": "GetLoggedTimeForDateRange",
+    "RelativePath": "api/Chart/logtime/{uid}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "easy_a_web_api.Controllers.EventController",
     "Method": "GetEvent",
     "RelativePath": "api/Event/{uid}/event/{eventId}",
@@ -56,6 +93,27 @@
     "Parameters": [
       {
         "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.EventController",
+    "Method": "GetEventsByDate",
+    "RelativePath": "api/Event/list/{uid}/date/{eventDate}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "eventDate",
         "Type": "System.String",
         "IsRequired": true
       }
@@ -131,6 +189,37 @@
         "Name": "questionId",
         "Type": "System.String",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionController",
+    "Method": "LogTime",
+    "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions/{questionId}/log-time",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionPaperId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "TimeLogged",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

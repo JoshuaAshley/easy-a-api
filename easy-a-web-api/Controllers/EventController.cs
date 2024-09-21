@@ -161,5 +161,61 @@ namespace easy_a_web_api.Controllers
                 return StatusCode(500, new { error = "An error occurred: " + ex.Message });
             }
         }
+
+        [HttpGet("list/{uid}/date/{eventDate}")]
+        public async Task<IActionResult> GetEventsByDate(string uid, string eventDate)
+        {
+            try
+            {
+                // Parse the provided event date (in UTC+2)
+                if (!DateTime.TryParse(eventDate, out DateTime parsedDate))
+                {
+                    return BadRequest(new { error = "Invalid date format. Please provide a valid date in yyyy-MM-dd format." });
+                }
+
+                // Convert the event date to the UTC time for querying Firestore
+                DateTime startOfDayUtc = TimeZoneInfo.ConvertTimeToUtc(parsedDate.Date, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
+                DateTime endOfDayUtc = startOfDayUtc.AddDays(1).AddTicks(-1);
+
+                // Reference to the user's document
+                DocumentReference userDocRef = _firestoreDb.Collection("users").Document(uid);
+
+                // Reference to the 'events' collection inside the user's document
+                CollectionReference eventsCollection = userDocRef.Collection("events");
+
+                // Query the events collection for events occurring on the specified date
+                Query query = eventsCollection.WhereGreaterThanOrEqualTo("eventDate", startOfDayUtc)
+                                              .WhereLessThanOrEqualTo("eventDate", endOfDayUtc);
+
+                QuerySnapshot eventsSnapshot = await query.GetSnapshotAsync();
+
+                var eventList = new List<EventResult>();
+
+                foreach (DocumentSnapshot document in eventsSnapshot.Documents)
+                {
+                    DateTime eventDateUtc = document.GetValue<DateTime>("eventDate");
+
+                    // Convert the event date from UTC to South Africa Standard Time (UTC+2)
+                    string eventDateUtcPlus2 = TimeZoneInfo.ConvertTimeFromUtc(eventDateUtc, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"))
+                        .ToString("yyyy-MM-dd");
+
+                    var eventResult = new EventResult
+                    {
+                        Uid = uid,
+                        EventId = document.Id,
+                        EventName = document.GetValue<string>("eventName"),
+                        EventDate = eventDateUtcPlus2 // Use the converted date string
+                    };
+
+                    eventList.Add(eventResult);
+                }
+
+                return Ok(new { message = "Events retrieved successfully", eventList });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
     }
 }

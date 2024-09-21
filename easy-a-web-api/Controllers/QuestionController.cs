@@ -191,6 +191,50 @@ namespace easy_a_web_api.Controllers
             }
         }
 
+        [HttpPost("{uid}/question-paper/{questionPaperId}/questions/{questionId}/log-time")]
+        public async Task<IActionResult> LogTime(string uid, string questionPaperId, string questionId, [FromForm] int TimeLogged)
+        {
+            try
+            {
+                // Reference to the user's document
+                DocumentReference userDocRef = _firestoreDb.Collection("users").Document(uid);
+
+                // Reference to the specific question paper document
+                DocumentReference questionPaperDocRef = userDocRef.Collection("questionPapers").Document(questionPaperId);
+
+                // Reference to the specific question document
+                DocumentReference questionDocRef = questionPaperDocRef.Collection("questions").Document(questionId);
+
+                // Check if the question exists
+                DocumentSnapshot questionSnapshot = await questionDocRef.GetSnapshotAsync();
+
+                if (!questionSnapshot.Exists)
+                {
+                    return NotFound(new { error = "Question not found" });
+                }
+
+                // Get the current total logged time
+                double currentTotalLoggedTime = questionSnapshot.ContainsField("totalLoggedTime")
+                    ? questionSnapshot.GetValue<double>("totalLoggedTime")
+                    : 0;
+
+                // Update the total logged time
+                double updatedTotalLoggedTime = currentTotalLoggedTime + TimeLogged;
+
+                // Update the question document with the new total logged time
+                await questionDocRef.UpdateAsync(new Dictionary<string, object>
+                {
+                    { "totalLoggedTime", updatedTotalLoggedTime }
+                });
+
+                return Ok(new { message = "Logged time updated successfully", totalLoggedTime = updatedTotalLoggedTime });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
+
         [HttpPost("{uid}/question-paper/{questionPaperId}/questions/{questionId}/complete")]
         public async Task<IActionResult> CompleteQuestion(string uid, string questionPaperId, string questionId)
         {
@@ -220,10 +264,14 @@ namespace easy_a_web_api.Controllers
                     return BadRequest(new { error = "Question is already marked as completed." });
                 }
 
-                // Update the isCompleted field of the question
+                // Get the current date and time in UTC
+                DateTime completedDate = DateTime.UtcNow;
+
+                // Update the isCompleted field and completedDate field of the question
                 await questionDocRef.UpdateAsync(new Dictionary<string, object>
                 {
-                    { "isCompleted", true }
+                    { "isCompleted", true },
+                    { "completedDate", completedDate }
                 });
 
                 // Increment the numCompletedQuestions field of the question paper
@@ -239,7 +287,7 @@ namespace easy_a_web_api.Controllers
 
                 await questionPaperDocRef.UpdateAsync(updateQPData);
 
-                return Ok(new { message = "Question marked as completed and numCompletedQuestions incremented" });
+                return Ok(new { message = "Question marked as completed, completedDate set, and numCompletedQuestions incremented" });
             }
             catch (Exception ex)
             {

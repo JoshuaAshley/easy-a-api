@@ -62,18 +62,18 @@ namespace easy_a_web_api.Controllers
 
                     // Update the question paper document with the PDF location
                     var updatePDFData = new Dictionary<string, object>
-            {
-                { "pdfLocation", pdfUrl }
-            };
+                    {
+                        { "pdfLocation", pdfUrl }
+                    };
                     await newQuestionPaperDocRef.UpdateAsync(updatePDFData);
                 }
 
                 int numQuestions = 0;
                 var updateData = new Dictionary<string, object>
-        {
-            { "numQuestions", numQuestions },
-            { "numCompletedQuestions", numQuestions }
-        };
+                {
+                    { "numQuestions", numQuestions },
+                    { "numCompletedQuestions", numQuestions }
+                };
 
                 await newQuestionPaperDocRef.UpdateAsync(updateData);
 
@@ -229,7 +229,8 @@ namespace easy_a_web_api.Controllers
                         int numCompletedQuestions = doc.GetValue<int>("numCompletedQuestions");
 
                         // Return papers where the due date is in the future and work is incomplete
-                        return questionPaperDueDate > currentUtcTime && numQuestions != numCompletedQuestions;
+                        return questionPaperDueDate > currentUtcTime &&
+                            (numQuestions != numCompletedQuestions || (numQuestions == 0 && numCompletedQuestions == 0));
                     })
                     .Select(doc => new QuestionPaperResult
                     {
