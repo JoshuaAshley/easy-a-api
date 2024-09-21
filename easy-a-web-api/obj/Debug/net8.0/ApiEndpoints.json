@@ -1,6 +1,79 @@
 [
   {
     "ContainingType": "easy_a_web_api.Controllers.QuestionController",
+    "Method": "GetQuestionsByQuestionPaperId",
+    "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionPaperId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionController",
+    "Method": "GetQuestionById",
+    "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions/{questionId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionPaperId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionController",
+    "Method": "CompleteQuestion",
+    "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions/{questionId}/complete",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionPaperId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "questionId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionController",
     "Method": "CreateQuestion",
     "RelativePath": "api/Question/create",
     "HttpMethod": "POST",
@@ -109,6 +182,22 @@
         "Name": "PdfFile",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.QuestionPaperController",
+    "Method": "GetIncompleteQuestionPapers",
+    "RelativePath": "api/QuestionPaper/home/{uid}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []

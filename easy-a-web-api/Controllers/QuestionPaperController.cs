@@ -55,7 +55,7 @@ namespace easy_a_web_api.Controllers
                 if (request.PdfFile != null)
                 {
                     // Folder structure: users/{Uid}/questionPapers/{QuestionPaperId}/PDF
-                    string storageFolder = $"question-papers/{questionPaperId}/PDF";
+                    string storageFolder = $"question-papers/{questionPaperId}";
 
                     // Upload the PDF to Firebase Storage
                     pdfUrl = await FileManagementService.UploadPdfToStorage(_storageClient, _bucketName, storageFolder, request.PdfFile);
@@ -71,7 +71,8 @@ namespace easy_a_web_api.Controllers
                 int numQuestions = 0;
                 var updateData = new Dictionary<string, object>
                 {
-                    { "numQuestions", numQuestions }
+                    { "numQuestions", numQuestions },
+                    { "numCompletedQuestions", numQuestions }
                 };
 
                 await newQuestionPaperDocRef.UpdateAsync(updateData);
@@ -91,7 +92,8 @@ namespace easy_a_web_api.Controllers
                     QuestionPaperDueDate = questionPaperDueDateUtcPlus2,
                     QuestionPaperDescription = request.QuestionPaperDescription,
                     PDFLocation = pdfUrl,
-                    NumQuestions = numQuestions
+                    NumQuestions = numQuestions,
+                    NumCompletedQuestions = numQuestions
                 };
 
                 return Ok(new { message = "Question paper created successfully", result });
@@ -126,7 +128,8 @@ namespace easy_a_web_api.Controllers
                         TimeZoneInfo.ConvertTimeFromUtc(doc.GetValue<DateTime>("questionPaperDueDate"), timeZone).ToString("yyyy-MM-dd") : "",
                     QuestionPaperDescription = doc.ContainsField("questionPaperDescription") ? doc.GetValue<string>("questionPaperDescription") : "",
                     PDFLocation = doc.ContainsField("pdfLocation") ? doc.GetValue<string>("pdfLocation") : "",
-                    NumQuestions = doc.ContainsField("numQuestions") ? doc.GetValue<int>("numQuestions") : 0
+                    NumQuestions = doc.ContainsField("numQuestions") ? doc.GetValue<int>("numQuestions") : 0,
+                    NumCompletedQuestions = doc.ContainsField("numCompletedQuestions") ? doc.GetValue<int>("numCompletedQuestions") : 0
                 }).ToList();
 
                 return Ok(new { questionPapers = questionPapersList });
@@ -167,10 +170,66 @@ namespace easy_a_web_api.Controllers
                         TimeZoneInfo.ConvertTimeFromUtc(questionPaperSnapshot.GetValue<DateTime>("questionPaperDueDate"), timeZone).ToString("yyyy-MM-dd") : "",
                     QuestionPaperDescription = questionPaperSnapshot.ContainsField("questionPaperDescription") ? questionPaperSnapshot.GetValue<string>("questionPaperDescription") : "",
                     PDFLocation = questionPaperSnapshot.ContainsField("pdfLocation") ? questionPaperSnapshot.GetValue<string>("pdfLocation") : "",
-                    NumQuestions = questionPaperSnapshot.ContainsField("numQuestions") ? questionPaperSnapshot.GetValue<int>("numQuestions") : 0
+                    NumQuestions = questionPaperSnapshot.ContainsField("numQuestions") ? questionPaperSnapshot.GetValue<int>("numQuestions") : 0,
+                    NumCompletedQuestions = questionPaperSnapshot.ContainsField("numCompletedQuestions") ? questionPaperSnapshot.GetValue<int>("numCompletedQuestions") : 0
                 };
 
                 return Ok(questionPaperResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
+
+        [HttpGet("home/{uid}")]
+        public async Task<IActionResult> GetIncompleteQuestionPapers(string uid)
+        {
+            try
+            {
+                // Reference to the user's question papers collection
+                DocumentReference userDocRef = _firestoreDb.Collection("users").Document(uid);
+                CollectionReference questionPapersCollection = userDocRef.Collection("questionPapers");
+
+                // Get the current UTC time
+                DateTime currentUtcTime = DateTime.UtcNow;
+
+                // Get all documents in the question papers collection
+                QuerySnapshot questionPapersSnapshot = await questionPapersCollection.GetSnapshotAsync();
+
+                // Define the desired timezone (UTC+2 in this case)
+                var timeZone = TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time");
+
+                // Filter out question papers that match the conditions: 
+                // Due date is before the current date and numQuestions != numCompletedQuestions
+                var incompleteQuestionPapers = questionPapersSnapshot.Documents
+                    .Where(doc =>
+                        doc.ContainsField("questionPaperDueDate") &&
+                        doc.ContainsField("numQuestions") &&
+                        doc.ContainsField("numCompletedQuestions"))
+                    .Where(doc =>
+                    {
+                        DateTime questionPaperDueDate = doc.GetValue<DateTime>("questionPaperDueDate");
+                        int numQuestions = doc.GetValue<int>("numQuestions");
+                        int numCompletedQuestions = doc.GetValue<int>("numCompletedQuestions");
+
+                        // Return papers where the due date is in the future and work is incomplete
+                        return questionPaperDueDate > currentUtcTime && numQuestions != numCompletedQuestions;
+                    })
+                    .Select(doc => new QuestionPaperResult
+                    {
+                        Uid = uid,
+                        QuestionPaperId = doc.Id,
+                        QuestionPaperName = doc.ContainsField("questionPaperName") ? doc.GetValue<string>("questionPaperName") : "",
+                        QuestionPaperDueDate = doc.ContainsField("questionPaperDueDate") ?
+                            TimeZoneInfo.ConvertTimeFromUtc(doc.GetValue<DateTime>("questionPaperDueDate"), timeZone).ToString("yyyy-MM-dd") : "",
+                        QuestionPaperDescription = doc.ContainsField("questionPaperDescription") ? doc.GetValue<string>("questionPaperDescription") : "",
+                        PDFLocation = doc.ContainsField("pdfLocation") ? doc.GetValue<string>("pdfLocation") : "",
+                        NumQuestions = doc.ContainsField("numQuestions") ? doc.GetValue<int>("numQuestions") : 0,
+                        NumCompletedQuestions = doc.ContainsField("numCompletedQuestions") ? doc.GetValue<int>("numCompletedQuestions") : 0
+                    }).ToList();
+
+                return Ok(new { questionPapers = incompleteQuestionPapers });
             }
             catch (Exception ex)
             {

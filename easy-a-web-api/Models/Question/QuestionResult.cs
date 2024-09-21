@@ -15,5 +15,7 @@
         public string? ImageLocation { get; set; }
 
         public int? TotatLoggedTime { get; set; }
+
+        public bool? IsCompleted { get; set; }
     }
 }

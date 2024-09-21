@@ -15,5 +15,7 @@
         public string? PDFLocation { get; set; }
 
         public int? NumQuestions { get; set; }
+
+        public int? NumCompletedQuestions { get; set; }
     }
 }
