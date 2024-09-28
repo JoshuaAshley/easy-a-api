@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("easy-a-web-api.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97d4b4228bc999605679376c26354da908415e7b")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6192fd6a249985df45564afbb55d1e456c5ce14f")]
 [assembly: System.Reflection.AssemblyProductAttribute("easy-a-web-api.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("easy-a-web-api.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
