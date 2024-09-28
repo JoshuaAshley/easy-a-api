@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34622.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "easy-a-web-api", "easy-a-web-api\easy-a-web-api.csproj", "{64CC4CE7-E530-44E6-A47E-3BE07623C4FF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "easy-a-web-api", "easy-a-web-api\easy-a-web-api.csproj", "{64CC4CE7-E530-44E6-A47E-3BE07623C4FF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "easy-a-web-api.Tests", "easy-a-web-api.Tests\easy-a-web-api.Tests.csproj", "{135683FC-CA0D-406F-833A-5D20AF6F0020}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{64CC4CE7-E530-44E6-A47E-3BE07623C4FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64CC4CE7-E530-44E6-A47E-3BE07623C4FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64CC4CE7-E530-44E6-A47E-3BE07623C4FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{135683FC-CA0D-406F-833A-5D20AF6F0020}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{135683FC-CA0D-406F-833A-5D20AF6F0020}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{135683FC-CA0D-406F-833A-5D20AF6F0020}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{135683FC-CA0D-406F-833A-5D20AF6F0020}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
