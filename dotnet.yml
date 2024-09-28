@@ -6,7 +6,7 @@ on:
       - Automated-Unit-Tests
   pull_request:
     branches:
-     - Automated-Unit-Tests
+      - Automated-Unit-Tests
 
 jobs:
   build-and-test:
