@@ -8,6 +8,6 @@ namespace easy_a_web_api.Tests.EventControllerTests
 {
     internal class EventControllerTests
     {
-        //actions tests
+        //testing workflow trigger
     }
 }
