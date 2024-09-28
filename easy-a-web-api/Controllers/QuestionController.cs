@@ -140,6 +140,8 @@ namespace easy_a_web_api.Controllers
                     IsCompleted = doc.ContainsField("isCompleted") ? doc.GetValue<bool>("isCompleted") : false,
                 }).ToList();
 
+                questionsList = questionsList.Where(doc => doc.IsCompleted == false).ToList();
+
                 return Ok(new { questions = questionsList });
             }
             catch (Exception ex)
@@ -191,7 +193,7 @@ namespace easy_a_web_api.Controllers
             }
         }
 
-        [HttpPost("{uid}/question-paper/{questionPaperId}/questions/{questionId}/log-time")]
+        [HttpPut("{uid}/question-paper/{questionPaperId}/questions/{questionId}/log-time")]
         public async Task<IActionResult> LogTime(string uid, string questionPaperId, string questionId, [FromForm] int TimeLogged)
         {
             try
@@ -235,7 +237,7 @@ namespace easy_a_web_api.Controllers
             }
         }
 
-        [HttpPost("{uid}/question-paper/{questionPaperId}/questions/{questionId}/complete")]
+        [HttpPut("{uid}/question-paper/{questionPaperId}/questions/{questionId}/complete")]
         public async Task<IActionResult> CompleteQuestion(string uid, string questionPaperId, string questionId)
         {
             try

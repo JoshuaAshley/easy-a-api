@@ -122,6 +122,59 @@ namespace easy_a_web_api.Controllers
             }
         }
 
+        [HttpGet("list/{uid}/month-range")]
+        public async Task<IActionResult> GetEventsByMonthRange(string uid, [FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
+        {
+            try
+            {
+                // Convert the provided dates (in UTC+2) to UTC for querying Firestore
+                DateTime startOfMonthUtc = TimeZoneInfo.ConvertTimeToUtc(startDate, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
+
+                // Use the day after the end date for the upper bound
+                DateTime endOfMonthUtc = TimeZoneInfo.ConvertTimeToUtc(endDate.AddDays(1), TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"));
+
+                // Reference to the user's document
+                DocumentReference userDocRef = _firestoreDb.Collection("users").Document(uid);
+
+                // Reference to the 'events' collection inside the user's document
+                CollectionReference eventsCollection = userDocRef.Collection("events");
+
+                // Query the events collection for events occurring within the date range
+                Query query = eventsCollection
+                    .WhereGreaterThanOrEqualTo("eventDate", startOfMonthUtc)
+                    .WhereLessThan("eventDate", endOfMonthUtc); // Use less than to exclude the day after the end date
+
+                QuerySnapshot eventsSnapshot = await query.GetSnapshotAsync();
+
+                var eventList = new List<EventResult>();
+
+                foreach (DocumentSnapshot document in eventsSnapshot.Documents)
+                {
+                    DateTime eventDateUtc = document.GetValue<DateTime>("eventDate");
+
+                    // Convert the event date from UTC to South Africa Standard Time (UTC+2)
+                    string eventDateUtcPlus2 = TimeZoneInfo.ConvertTimeFromUtc(eventDateUtc, TimeZoneInfo.FindSystemTimeZoneById("South Africa Standard Time"))
+                        .ToString("yyyy-MM-dd");
+
+                    var eventResult = new EventResult
+                    {
+                        Uid = uid,
+                        EventId = document.Id,
+                        EventName = document.GetValue<string>("eventName"),
+                        EventDate = eventDateUtcPlus2 // Use the converted date string
+                    };
+
+                    eventList.Add(eventResult);
+                }
+
+                return Ok(new { message = "Events retrieved successfully", eventList });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "An error occurred: " + ex.Message });
+            }
+        }
+
         [HttpGet("{uid}/event/{eventId}")]
         public async Task<IActionResult> GetEvent(string uid, string eventId)
         {

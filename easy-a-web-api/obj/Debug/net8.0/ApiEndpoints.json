@@ -121,6 +121,32 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "easy_a_web_api.Controllers.EventController",
+    "Method": "GetEventsByMonthRange",
+    "RelativePath": "api/Event/list/{uid}/month-range",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "startDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "endDate",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "easy_a_web_api.Controllers.QuestionController",
     "Method": "GetQuestionsByQuestionPaperId",
     "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions",
@@ -171,7 +197,7 @@
     "ContainingType": "easy_a_web_api.Controllers.QuestionController",
     "Method": "CompleteQuestion",
     "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions/{questionId}/complete",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -197,7 +223,7 @@
     "ContainingType": "easy_a_web_api.Controllers.QuestionController",
     "Method": "LogTime",
     "RelativePath": "api/Question/{uid}/question-paper/{questionPaperId}/questions/{questionId}/log-time",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -372,6 +398,22 @@
   },
   {
     "ContainingType": "easy_a_web_api.Controllers.UserController",
+    "Method": "CheckUserExists",
+    "RelativePath": "api/User/check-user-exists",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.UserController",
     "Method": "GoogleSignIn",
     "RelativePath": "api/User/google-signin",
     "HttpMethod": "POST",
@@ -379,7 +421,27 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "Token",
+        "Name": "Uid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Firstname",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "LastName",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "ProfilePicture",
         "Type": "System.String",
         "IsRequired": false
       }
