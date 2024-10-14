@@ -308,5 +308,59 @@ namespace easy_a_web_api.Controllers
             }
         }
 
+        [HttpDelete("delete-account")]
+        public async Task<IActionResult> DeleteAccount([FromForm] DeleteAccountRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                // Authenticate user with Firebase Auth
+                var authResult = await _authProvider.SignInWithEmailAndPasswordAsync(request.Email, request.Password);
+                var userId = authResult.User.LocalId;
+
+                // Delete user document from Firestore
+                DocumentReference docRef = FireStoreService.DB!.Collection("users").Document(userId);
+                await docRef.DeleteAsync();
+
+                // Delete user folders from Firebase Storage
+                await DeleteUserFolders(_storageClient, _bucketName, userId);
+
+                return Ok(new { message = "Account deleted successfully" });
+            }
+            catch (Firebase.Auth.FirebaseAuthException ex)
+            {
+                if (ex.Reason == AuthErrorReason.InvalidEmailAddress || ex.Reason == AuthErrorReason.WrongPassword)
+                {
+                    return Unauthorized(new { error = "Invalid email or password" });
+                }
+
+                return StatusCode(500, new { error = "Account deletion failed: " + ex.Message });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Internal server error: " + ex.Message });
+            }
+        }
+
+        public static async Task DeleteUserFolders(StorageClient storageClient, string bucketName, string userId)
+        {
+            var foldersToDelete = new List<string>
+            {
+                $"profile-photos/{userId}",
+                $"question-papers/{userId}",
+                $"questions/{userId}"
+            };
+
+            foreach (var folder in foldersToDelete)
+            {
+                var files = storageClient.ListObjects(bucketName, folder);
+                foreach (var file in files)
+                {
+                    await storageClient.DeleteObjectAsync(bucketName, file.Name);
+                }
+            }
+        }
     }
 }

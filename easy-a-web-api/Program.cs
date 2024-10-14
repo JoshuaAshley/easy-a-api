@@ -4,17 +4,27 @@ internal class Program
 {
     private static void Main(string[] args)
     {
-
         FireStoreService.SetEnvironmentVariable();
 
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+
+        // Configure CORS with specific allowed origins
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowSpecificOrigins",
+                builder => builder.WithOrigins(
+                        "https://orange-river-0233d5603.5.azurestaticapps.net", // Your React app's URL
+                        "http://localhost:3000" // Local development URL
+                    )
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+        });
 
         var app = builder.Build();
 
@@ -23,6 +33,9 @@ internal class Program
         app.UseSwaggerUI();
 
         app.UseHttpsRedirection();
+
+        // Use CORS before authorization
+        app.UseCors("AllowSpecificOrigins");
 
         app.UseAuthorization();
 

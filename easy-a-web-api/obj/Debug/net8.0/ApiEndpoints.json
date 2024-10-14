@@ -414,6 +414,27 @@
   },
   {
     "ContainingType": "easy_a_web_api.Controllers.UserController",
+    "Method": "DeleteAccount",
+    "RelativePath": "api/User/delete-account",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Email",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Password",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.UserController",
     "Method": "GoogleSignIn",
     "RelativePath": "api/User/google-signin",
     "HttpMethod": "POST",
