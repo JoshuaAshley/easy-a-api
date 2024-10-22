@@ -17,5 +17,11 @@
         public string? DateOfBirth { get; set; }
 
         public string? ProfilePicture { get; set; }
+
+        public string? Language { get; set; }
+
+        public bool Notifications { get; set; }
+
+        public string? Theme { get; set; }
     }
 }

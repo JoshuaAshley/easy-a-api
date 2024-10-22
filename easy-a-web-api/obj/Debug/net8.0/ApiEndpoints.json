@@ -435,6 +435,22 @@
   },
   {
     "ContainingType": "easy_a_web_api.Controllers.UserController",
+    "Method": "GetUserSettings",
+    "RelativePath": "api/User/get-settings/{uid}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "uid",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.UserController",
     "Method": "GoogleSignIn",
     "RelativePath": "api/User/google-signin",
     "HttpMethod": "POST",
@@ -577,6 +593,37 @@
       {
         "Name": "ProfileImage",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "easy_a_web_api.Controllers.UserController",
+    "Method": "UpdateSettings",
+    "RelativePath": "api/User/update-settings",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "Uid",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Language",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Notifications",
+        "Type": "System.Boolean",
+        "IsRequired": false
+      },
+      {
+        "Name": "Theme",
+        "Type": "System.String",
         "IsRequired": false
       }
     ],

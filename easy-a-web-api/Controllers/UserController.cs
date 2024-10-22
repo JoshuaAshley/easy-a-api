@@ -56,6 +56,16 @@ namespace easy_a_web_api.Controllers
                 DocumentReference docRef = FireStoreService.DB!.Collection("users").Document(userId);
                 await docRef.SetAsync(userData);
 
+                // Add default settings document to Firestore
+                DocumentReference settingsDocRef = docRef.Collection("settings").Document("user-settings");
+                var defaultSettings = new
+                {
+                    language = "English",
+                    notifications = true,
+                    theme = "dark"
+                };
+                await settingsDocRef.SetAsync(defaultSettings);
+
                 // Create the response result with registered user details
                 var registerResult = new UserResult
                 {
@@ -115,8 +125,29 @@ namespace easy_a_web_api.Controllers
                     return NotFound(new { error = "User details not found" });
                 }
 
+                // Check if the settings document exists, and create default settings if not
+                DocumentReference settingsDocRef = docRef.Collection("settings").Document("user-settings");
+                var settingsDoc = await settingsDocRef.GetSnapshotAsync();
+                if (!settingsDoc.Exists)
+                {
+                    var defaultSettings = new
+                    {
+                        language = "English",
+                        notifications = true,
+                        theme = "dark"
+                    };
+                    await settingsDocRef.SetAsync(defaultSettings);
+                    settingsDoc = await settingsDocRef.GetSnapshotAsync();
+                }
+
                 // Extract user data from Firestore document
                 var userData = userDoc.ToDictionary();
+
+                // Extract user settings from Firestore settings document
+                var settingsData = settingsDoc.ToDictionary();
+                string language = settingsData.ContainsKey("language") ? settingsData["language"].ToString() : "English";
+                bool notifications = settingsData.ContainsKey("notifications") ? (bool)settingsData["notifications"] : true;
+                string theme = settingsData.ContainsKey("theme") ? settingsData["theme"].ToString() : "dark";
 
                 // Prepare response
                 var loginResult = new UserResult
@@ -128,7 +159,10 @@ namespace easy_a_web_api.Controllers
                     LastName = userData.ContainsKey("lastname") ? userData["lastname"]?.ToString() ?? string.Empty : string.Empty,
                     Gender = userData.ContainsKey("gender") ? userData["gender"]?.ToString() ?? string.Empty : string.Empty,
                     DateOfBirth = userData.ContainsKey("dob") ? userData["dob"]?.ToString() ?? string.Empty : string.Empty,
-                    ProfilePicture = userData.ContainsKey("pfp") ? userData["pfp"]?.ToString() ?? string.Empty : string.Empty
+                    ProfilePicture = userData.ContainsKey("pfp") ? userData["pfp"]?.ToString() ?? string.Empty : string.Empty,
+                    Language = language,
+                    Notifications = notifications,
+                    Theme = theme
                 };
 
                 return Ok(loginResult);
@@ -229,6 +263,73 @@ namespace easy_a_web_api.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, new { error = "Internal server error: " + ex.Message });
+            }
+        }
+
+        [HttpPut("update-settings")]
+        public async Task<IActionResult> UpdateSettings([FromForm] UpdateSettingsRequest request)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                // Retrieve user document from Firestore using the provided Uid
+                DocumentReference settingsDocRef = FireStoreService.DB!.Collection("users").Document(request.Uid).Collection("settings").Document("user-settings");
+
+                // Prepare the updated settings data
+                var settingsData = new
+                {
+                    language = request.Language ?? "English",
+                    notifications = request.Notifications,
+                    theme = request.Theme ?? "dark"
+                };
+
+                // Update the Firestore settings document with the new settings
+                await settingsDocRef.SetAsync(settingsData, SetOptions.MergeAll);
+
+                return Ok(new { message = "Settings updated successfully" });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Failed to update settings: " + ex.Message });
+            }
+        }
+
+        [HttpGet("get-settings/{uid}")]
+        public async Task<IActionResult> GetUserSettings(string uid)
+        {
+            try
+            {
+                // Retrieve the user's settings document from Firestore
+                DocumentReference settingsDocRef = FireStoreService.DB!.Collection("users").Document(uid).Collection("settings").Document("user-settings");
+                var settingsDoc = await settingsDocRef.GetSnapshotAsync();
+
+                if (!settingsDoc.Exists)
+                {
+                    return NotFound(new { error = "Settings not found for this user" });
+                }
+
+                // Extract settings data from the Firestore document
+                var settingsData = settingsDoc.ToDictionary();
+                string language = settingsData.ContainsKey("language") ? settingsData["language"].ToString() : "English";
+                bool notifications = settingsData.ContainsKey("notifications") ? (bool)settingsData["notifications"] : true;
+                string theme = settingsData.ContainsKey("theme") ? settingsData["theme"].ToString() : "dark";
+
+                // Prepare response
+                var settingsResult = new
+                {
+                    Uid = uid,
+                    Language = language,
+                    Notifications = notifications,
+                    Theme = theme
+                };
+
+                return Ok(settingsResult);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { error = "Failed to retrieve user settings: " + ex.Message });
             }
         }
 
