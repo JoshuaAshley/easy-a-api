@@ -6,5 +6,6 @@
         public string? Language { get; set; }
         public bool Notifications { get; set; }
         public string? Theme { get; set; }
+        public bool? BiometricAuthentication { get; set; }
     }
 }

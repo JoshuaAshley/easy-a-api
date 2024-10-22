@@ -62,7 +62,8 @@ namespace easy_a_web_api.Controllers
                 {
                     language = "English",
                     notifications = true,
-                    theme = "dark"
+                    theme = "dark",
+                    biometricAuthentication = false,
                 };
                 await settingsDocRef.SetAsync(defaultSettings);
 
@@ -76,7 +77,11 @@ namespace easy_a_web_api.Controllers
                     LastName = request.LastName ?? string.Empty,
                     Gender = request.Gender ?? string.Empty,
                     DateOfBirth = request.DateOfBirth.ToString() ?? null,
-                    ProfilePicture = request.ProfilePicture ?? string.Empty
+                    ProfilePicture = request.ProfilePicture ?? string.Empty,
+                    Language = defaultSettings.language,
+                    Notifications = defaultSettings.notifications,
+                    Theme = defaultSettings.theme,
+                    BiometricAuthentication = defaultSettings.biometricAuthentication,
                 };
 
                 return Ok(registerResult);
@@ -134,7 +139,8 @@ namespace easy_a_web_api.Controllers
                     {
                         language = "English",
                         notifications = true,
-                        theme = "dark"
+                        theme = "dark",
+                        biometricAuthentication = false,
                     };
                     await settingsDocRef.SetAsync(defaultSettings);
                     settingsDoc = await settingsDocRef.GetSnapshotAsync();
@@ -148,6 +154,7 @@ namespace easy_a_web_api.Controllers
                 string language = settingsData.ContainsKey("language") ? settingsData["language"].ToString() : "English";
                 bool notifications = settingsData.ContainsKey("notifications") ? (bool)settingsData["notifications"] : true;
                 string theme = settingsData.ContainsKey("theme") ? settingsData["theme"].ToString() : "dark";
+                bool biometrics = settingsData.ContainsKey("biometricAuthentication") ? (bool)settingsData["biometricAuthentication"] : false;
 
                 // Prepare response
                 var loginResult = new UserResult
@@ -162,7 +169,8 @@ namespace easy_a_web_api.Controllers
                     ProfilePicture = userData.ContainsKey("pfp") ? userData["pfp"]?.ToString() ?? string.Empty : string.Empty,
                     Language = language,
                     Notifications = notifications,
-                    Theme = theme
+                    Theme = theme,
+                    BiometricAuthentication = biometrics,
                 };
 
                 return Ok(loginResult);
@@ -282,7 +290,8 @@ namespace easy_a_web_api.Controllers
                 {
                     language = request.Language ?? "English",
                     notifications = request.Notifications,
-                    theme = request.Theme ?? "dark"
+                    theme = request.Theme ?? "dark",
+                    biometricAuthentication = request.BiometricAuthentication
                 };
 
                 // Update the Firestore settings document with the new settings
