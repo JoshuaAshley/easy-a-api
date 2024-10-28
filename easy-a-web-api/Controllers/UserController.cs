@@ -324,6 +324,7 @@ namespace easy_a_web_api.Controllers
                 string language = settingsData.ContainsKey("language") ? settingsData["language"].ToString() : "English";
                 bool notifications = settingsData.ContainsKey("notifications") ? (bool)settingsData["notifications"] : true;
                 string theme = settingsData.ContainsKey("theme") ? settingsData["theme"].ToString() : "dark";
+                bool biometrics = settingsData.ContainsKey("biometricAuthentication") ? (bool)settingsData["biometricAuthentication"] : false;
 
                 // Prepare response
                 var settingsResult = new
@@ -331,7 +332,8 @@ namespace easy_a_web_api.Controllers
                     Uid = uid,
                     Language = language,
                     Notifications = notifications,
-                    Theme = theme
+                    Theme = theme,
+                    Biometrics = biometrics,
                 };
 
                 return Ok(settingsResult);
